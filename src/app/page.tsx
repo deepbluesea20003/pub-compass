@@ -1,6 +1,6 @@
 'use client'
 
-import Compass from "@/compass/Compass";
+import Compass from "@/app/compass/Compass";
 
 
 export default function Home() {
