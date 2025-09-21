@@ -1,4 +1,5 @@
-export async function findNearestPub(lat: number, lon: number) {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export async function findNearestPub(_lat: number, _lon: number) {
     // const proxyUrl = "http://localhost:3001/api/google/nearestPub"; // You may need to proxy this in dev to avoid CORS.
     // const res = await fetch(
     //     proxyUrl + "?lat=" + encodeURIComponent(lat) + "&lon=" + encodeURIComponent(lon)
