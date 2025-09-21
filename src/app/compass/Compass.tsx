@@ -14,7 +14,11 @@ function getBearing(lat1: number, lon1: number, lat2: number, lon2: number) {
 }
 
 
-export default function Compass() {
+interface CompassProps {
+    onClick?: () => void;
+}
+
+export default function Compass({ onClick }: CompassProps) {
     const [userPos, setUserPos] = useState<{ lat: number, lon: number } | null>(null);
     const [pubBearing, setPubBearing] = useState<number | null>(null);
     const [pubName, setPubName] = useState<string | null>(null);
@@ -24,7 +28,7 @@ export default function Compass() {
             const lat = pos.coords.latitude, lon = pos.coords.longitude;
             setUserPos({ lat, lon });
 
-            const nearestPub = await findNearestPub(lat, lon, '');
+            const nearestPub = await findNearestPub(lat, lon);
             console.log(nearestPub);
 
             const bearing = getBearing(lat, lon, nearestPub.lat, nearestPub.lon);
@@ -35,15 +39,25 @@ export default function Compass() {
 
     console.log("Got position:", userPos?.lat, userPos?.lon);
 
-    return (<><div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-blue-200 to-purple-300">
-        <h1 className="text-3xl font-bold mb-6">Compass</h1>
-        <div className="relative w-40 h-40 rounded-full border-4 border-black flex items-center justify-center">
-            <div
-                className="absolute w-1 h-20 bg-red-600 origin-bottom"
-                style={{ transform: `rotate(${pubBearing ?? 0}deg)` }} />
-            <span className="absolute bottom-1 text-xs">N</span>
-        </div>
-        <p className="mt-4 text-lg">{pubBearing !== null ? `${pubBearing.toFixed(0)}°` : "Waiting for sensor..."}</p>
-    </div><div>Your nearest pub is: ${pubName}</div></>
+    return (
+        <>
+            <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-blue-200 to-purple-300">
+                <h1 className="text-3xl font-bold mb-6">Compass</h1>
+                <div className="relative w-40 h-40 rounded-full border-4 border-black flex items-center justify-center">
+                    <div
+                        className="absolute w-1 h-20 bg-red-600 origin-bottom"
+                        style={{ transform: `rotate(${pubBearing ?? 0}deg)` }} />
+                    <span className="absolute bottom-1 text-xs">N</span>
+                </div>
+                <p className="mt-4 text-lg">{pubBearing !== null ? `${pubBearing.toFixed(0)}°` : "Waiting for sensor..."}</p>
+                <button
+                    onClick={onClick}
+                    className="mt-4 px-4 py-2 bg-blue-500 text-white rounded shadow hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                >
+                    Refresh
+                </button>
+                <div>Your nearest pub is: {pubName}</div>
+            </div>
+        </>
     );
 }
